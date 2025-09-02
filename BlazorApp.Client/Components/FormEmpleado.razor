@@ -1,0 +1,81 @@
+﻿@inject NavigationManager navigationManager
+@inject EmpleadoService empleadoService
+<h2>@Nombre_Completo</h2>
+<EditForm Model="@oEmpleadoFormCLS" OnValidSubmit="@guardar">
+    <DataAnnotationsValidator />
+    <div class="=mt-3">
+        <label>Num_Empleado</label>
+        <InputNumber class="form-control" @bind-value="oEmpleadoFormCLS.Num_Empleado" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Num_Empleado)" />
+    </div>
+    <div class="=mt-3">
+        <label>Nombre</label>
+        <InputText class="form-control" @bind-value="oEmpleadoFormCLS.Nombre_Completo" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Nombre_Completo)" />
+    </div>
+    <div class="=mt-3">
+        <label>Edad</label>
+        <InputNumber class="form-control" @bind-value="oEmpleadoFormCLS.Edad" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Edad)" />
+    </div>
+    <div class="=mt-3">
+        <label>Cargo</label>
+        <InputText class="form-control" @bind-value="oEmpleadoFormCLS.Cargo" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Cargo)" />
+    </div>
+    <div class="=mt-3">
+        <label>Fecha Contrato</label>
+        <InputDate class="form-control" @bind-value="oEmpleadoFormCLS.FechaContrato" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.FechaContrato)" />
+    </div>
+    <div class="=mt-3">
+        <label>Cuota</label>
+        <InputNumber class="form-control" @bind-value="oEmpleadoFormCLS.Cuota" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Cuota)" />
+    </div>
+    <div class="=mt-3">
+        <label>Ventas</label>
+        <InputNumber class="form-control" @bind-value="oEmpleadoFormCLS.Ventas" />
+        <ValidationMessage For="(() => oEmpleadoFormCLS.Ventas)" />
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button @onclick="@regresar" class="btn btn-danger">Regresar</button>
+    </div>
+   
+</EditForm>
+
+
+@code {
+    public EmpleadoFormCLS oEmpleadoFormCLS { get; set; } = new EmpleadoFormCLS();
+    [Parameter]
+    public int Num_Empleado{ get; set; }
+
+    public string Nombre_Completo { get; set; } = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Num_Empleado==0) Nombre_Completo="Agregar Empleado"; 
+        else
+        {
+            Nombre_Completo = "Editar Empleado";
+            oEmpleadoFormCLS = empleadoService.recuperarEmpleadoPorId(Num_Empleado);
+        }
+        return base.OnInitializedAsync(); 
+    }
+
+    public void guardar()
+    {
+        if(Nombre_Completo=="Agregar Empleado")
+        {
+            empleadoService.guardarEmpleado(oEmpleadoFormCLS); 
+            navigationManager.NavigateTo("empleado"); 
+        }
+    }
+
+    private void regresar()
+    {
+        navigationManager.NavigateTo("/empleado");
+    }
+}
