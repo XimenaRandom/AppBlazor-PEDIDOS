@@ -1,11 +1,13 @@
 ﻿@inject NavigationManager navigationManager
 @inject EmpleadoService empleadoService
+@inject TipoDepartamentoService tipoDepartamentoService
+@inject TipoDirectorService tipoDirectorService
 <h2>@Nombre_Completo</h2>
 <EditForm Model="@oEmpleadoFormCLS" OnValidSubmit="@guardar">
     <DataAnnotationsValidator />
     <div class="=mt-3">
         <label>Num_Empleado</label>
-        <InputNumber class="form-control" @bind-value="oEmpleadoFormCLS.Num_Empleado" />
+        <InputNumber readonly class="form-control" @bind-value="oEmpleadoFormCLS.Num_Empleado" />
         <ValidationMessage For="(() => oEmpleadoFormCLS.Num_Empleado)" />
     </div>
     <div class="=mt-3">
@@ -39,6 +41,32 @@
         <ValidationMessage For="(() => oEmpleadoFormCLS.Ventas)" />
     </div>
 
+    <div class="=mt-3">
+        <label>Seleccione Sucursal</label>
+        <InputSelect class="form-control" @bind-value="oEmpleadoFormCLS.idtipodepartamento" >
+            <option value="0">--Seleccione--</option>
+            @foreach (var item in listatipodep)
+            {
+                <option value="@item.idtipodepartamento">@item.nombretipodepartamento</option>
+            }
+        </InputSelect>
+        
+        <ValidationMessage For="(() => oEmpleadoFormCLS.idtipodepartamento)" />
+    </div>
+
+    <div class="=mt-3">
+        <label>Seleccione Director</label>
+        <InputSelect class="form-control" @bind-value="oEmpleadoFormCLS.idtipodirector">
+            <option value="0">--Seleccione--</option>
+            @foreach (var item in listatipodir)
+            {
+                <option value="@item.idtipodirector">@item.nombretipodirector</option>
+            }
+        </InputSelect>
+
+        <ValidationMessage For="(() => oEmpleadoFormCLS.idtipodirector)" />
+    </div>
+
     <div class="mt-3">
         <button type="submit" class="btn btn-success">Guardar</button>
         <button @onclick="@regresar" class="btn btn-danger">Regresar</button>
@@ -54,8 +82,14 @@
 
     public string Nombre_Completo { get; set; } = "";
 
+    public List<TipoDepartamentoCLS> listatipodep { get; set; } = new List<TipoDepartamentoCLS>();
+    public List<TipoDirectorCLS> listatipodir { get; set; } = new List<TipoDirectorCLS>();
+
     protected override Task OnInitializedAsync()
     {
+        listatipodep = tipoDepartamentoService.listarTipoDepartamento();
+        listatipodir = tipoDirectorService.listarTipoDirector();
+
         if (Num_Empleado==0) Nombre_Completo="Agregar Empleado"; 
         else
         {

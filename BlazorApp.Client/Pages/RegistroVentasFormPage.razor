@@ -19,6 +19,8 @@
                 <th>Fecha Contrato</th>
                 <th>Cuota</th>
                 <th>Ventas</th>
+                <th>Nombre Sucursal</th>
+                <th>Nombre Director</th>
                 <th>Operaciones</th>
             </tr>
         </thead>
@@ -33,7 +35,9 @@
                     <td>@item.FechaContrato</td>
                     <td>@item.Cuota</td>
                     <td>@item.Ventas</td>
-                    
+                    <td>@item.nombretipodepartamento</td>
+                    <td>@item.nombretipodirector</td>
+
                     <td>
                         <button class="btn btn-primary" @onclick="(() => recuperarEmpleado(item.Num_Empleado))">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
@@ -52,6 +56,7 @@
         </tbody>
     </table>
 }
+
 @code {
     private void nuevo()
     {

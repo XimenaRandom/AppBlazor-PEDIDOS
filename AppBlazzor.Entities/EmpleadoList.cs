@@ -15,7 +15,9 @@ namespace AppBlazzor.Entities
         public DateTime FechaContrato { get; set; }
         public double Cuota { get; set; }
         public int Ventas { get; set; }
-        
         public int Operaciones { get; set; }
+
+        public string nombretipodepartamento { get; set; } = string.Empty;
+        public string nombretipodirector { get; set;} = string.Empty;
     }
 }
