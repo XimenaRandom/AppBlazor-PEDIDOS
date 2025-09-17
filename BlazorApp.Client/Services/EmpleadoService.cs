@@ -56,7 +56,20 @@ namespace BlazorApp.Client.Services
             }); 
         }
 
+        public List<EmpleadoList> filtrarEmpleados(string nombreempleado)
+        {
 
+            List<EmpleadoList> e = listarempleados();
+            if (nombreempleado == "")
+            {
+                return e;
+            }
+            else
+            {
+                List<EmpleadoList> listaFiltrada = e.Where(p => p.Nombre_Completo.ToUpper().Contains(nombreempleado.ToUpper())).ToList();
+                return listaFiltrada;
+            }
+        }
 
     }
 }

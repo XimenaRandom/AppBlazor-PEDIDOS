@@ -24,5 +24,6 @@ namespace AppBlazzor.Entities.Services
             return lista;
         }
 
+        
     }
 }

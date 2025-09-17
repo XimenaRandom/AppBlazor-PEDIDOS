@@ -46,5 +46,7 @@ namespace BlazorApp.Client.Services
                 return obj.nombretipodirector;
             }
         }
+
+        
     }
 }
