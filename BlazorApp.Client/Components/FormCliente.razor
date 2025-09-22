@@ -1,0 +1,82 @@
+﻿@inject NavigationManager navigationManager
+@inject ClienteService clienteService
+@inject EmpleadoService empleadoService
+
+<h2>@TituloFormulario</h2>
+<EditForm Model="@oClienteFormCLS" OnValidSubmit="@guardar">
+    <DataAnnotationsValidator />
+    <div class="mt-3">
+        <label>Numero de Cliente</label>
+        <InputNumber readonly class="form-control" @bind-Value="oClienteFormCLS.Num_Cliente" />
+        <ValidationMessage For="(() => oClienteFormCLS.Num_Cliente)" />
+    </div>
+    <div class="mt-3">
+        <label>Nombre Cliente</label>
+        <InputText class="form-control" @bind-Value="oClienteFormCLS.Nombre_Cliente" />
+        <ValidationMessage For="(() => oClienteFormCLS.Nombre_Cliente)" />
+    </div>
+    <div class="mt-3">
+        <label>Representante</label>
+        <InputSelect class="form-control" @bind-Value="oClienteFormCLS.idrepresentante">
+            <option value="0">--Seleccione--</option>
+            @foreach (var empleado in listaEmpleados)
+            {
+                <option value="@empleado.Num_Empleado">@empleado.Nombre_Completo</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(() => oClienteFormCLS.idrepresentante)" />
+    </div>
+    <div class="mt-3">
+        <label>Cuota</label>
+        <InputNumber class="form-control" @bind-Value="oClienteFormCLS.Limite_Cuota" />
+        <ValidationMessage For="(() => oClienteFormCLS.Limite_Cuota)" />
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" @onclick="regresar" class="btn btn-danger">Regresar</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Num_Cliente { get; set; }
+
+    public ClienteFormCLS oClienteFormCLS { get; set; } = new ClienteFormCLS();
+    public string TituloFormulario { get; set; } = "";
+    public List<EmpleadoList> listaEmpleados { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        listaEmpleados = empleadoService.listarempleados();
+
+        if (Num_Cliente == 0)
+        {
+            TituloFormulario = "Agregar Cliente";
+            oClienteFormCLS = new ClienteFormCLS();
+        }
+        else
+        {
+            TituloFormulario = "Editar Cliente";
+            oClienteFormCLS = clienteService.recuperarClientePorId(Num_Cliente);
+        }
+        return base.OnInitializedAsync();
+    }
+
+    public void guardar()
+    {
+        if (Num_Cliente == 0)
+        {
+            clienteService.guardarCliente(oClienteFormCLS);
+        }
+        else
+        {
+            clienteService.actualizarCliente(oClienteFormCLS);
+        }
+        navigationManager.NavigateTo("/registroclientes");
+    }
+
+    private void regresar()
+    {
+        navigationManager.NavigateTo("/registroclientes");
+    }
+}

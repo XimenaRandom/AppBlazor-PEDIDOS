@@ -3,7 +3,7 @@ namespace BlazorApp.Client.Services
 {
     public class EmpleadoService
     {
-        private List<EmpleadoList> lista;
+        private List<EmpleadoList> listacli;
 
         private TipoDepartamentoService tipodepartamentoservice;
         private TipoDirectorService tipodirectorservice;
@@ -12,22 +12,22 @@ namespace BlazorApp.Client.Services
             tipodepartamentoservice = _tipodepartmentoservice;
             tipodirectorservice = _tipodirevtorservice;
 
-            lista = new List<EmpleadoList>();
-            lista.Add(new EmpleadoList {Num_Empleado = 1, Nombre_Completo = "Ximena Ayala", Edad = 21, Cargo = "Diseñadora", FechaContrato = new DateTime(2023, 4, 3, 21, 40, 0), Cuota = 30, Ventas = 60, nombretipodepartamento = "La Paz", nombretipodirector = "Chismena Pollo" });
-            lista.Add(new EmpleadoList { Num_Empleado = 2, Nombre_Completo = "Max Ibarra", Edad = 18, Cargo = "Contador", FechaContrato = new DateTime(2025, 8, 25, 16, 40, 0), Cuota = 20, Ventas = 40, nombretipodepartamento = "Pando" ,nombretipodirector = "Menerva Alga",  });
+            listacli = new List<EmpleadoList>();
+            listacli.Add(new EmpleadoList {Num_Empleado = 1, Nombre_Completo = "Ximena Ayala", Edad = 21, Cargo = "Diseñadora", FechaContrato = new DateTime(2023, 4, 3, 21, 40, 0), Cuota = 30, Ventas = 60, nombretipodepartamento = "La Paz", nombretipodirector = "Chismena Pollo" });
+            listacli.Add(new EmpleadoList { Num_Empleado = 2, Nombre_Completo = "Max Ibarra", Edad = 18, Cargo = "Contador", FechaContrato = new DateTime(2025, 8, 25, 16, 40, 0), Cuota = 20, Ventas = 40, nombretipodepartamento = "Pando" ,nombretipodirector = "Menerva Alga",  });
         }
         public List<EmpleadoList> listarempleados()
         {
-            return lista; 
+            return listacli; 
         }
         public void eliminarEmpleado(int Num_Empleado)
         {
-            var listaQueda = lista.Where(p => p.Num_Empleado != Num_Empleado).ToList();
-            lista = listaQueda;
+            var listaQueda = listacli.Where(p => p.Num_Empleado != Num_Empleado).ToList();
+            listacli = listaQueda;
         }
         public EmpleadoFormCLS recuperarEmpleadoPorId(int Num_Empleado)
         {
-            var obj = lista.Where(e => e.Num_Empleado == Num_Empleado).FirstOrDefault();
+            var obj = listacli.Where(e => e.Num_Empleado == Num_Empleado).FirstOrDefault();
             if(obj != null)
             {
                 return new EmpleadoFormCLS
@@ -44,8 +44,8 @@ namespace BlazorApp.Client.Services
         }
         public void guardarEmpleado(EmpleadoFormCLS oEmpleadoFormCLS)
         {
-            int Num_Empleado = lista.Select(p => p.Num_Empleado).Max() + 1;
-            lista.Add(new EmpleadoList {
+            int Num_Empleado = listacli.Select(p => p.Num_Empleado).Max() + 1;
+            listacli.Add(new EmpleadoList {
                 Num_Empleado = Num_Empleado,
                 Nombre_Completo = oEmpleadoFormCLS.Nombre_Completo,
                 Edad = oEmpleadoFormCLS.Edad, Cargo= oEmpleadoFormCLS.Cargo,
@@ -68,6 +68,34 @@ namespace BlazorApp.Client.Services
             {
                 List<EmpleadoList> listaFiltrada = e.Where(p => p.Nombre_Completo.ToUpper().Contains(nombreempleado.ToUpper())).ToList();
                 return listaFiltrada;
+            }
+        }
+
+
+
+        public int obtenerIdEmpleado(string nombreempleado)
+        {
+            var obj = listacli.Where(p => p.Nombre_Completo == nombreempleado).FirstOrDefault();
+            if (obj == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return obj.Num_Empleado;
+            }
+        }
+
+        public string obtenerNombreEmpleado(int idempleado)
+        {
+            var obj = listacli.Where(p => p.Num_Empleado == idempleado).FirstOrDefault();
+            if (obj == null)
+            {
+                return "";
+            }
+            else
+            {
+                return obj.Nombre_Completo;
             }
         }
 

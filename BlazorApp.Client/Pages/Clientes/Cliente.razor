@@ -1,0 +1,18 @@
+﻿@page "/cliente"
+@inject NavigationManager navigationManager
+
+<h3>Cliente</h3>
+
+<button @onclick="navegar1" class="btn btn-primary">Navegar a Lista de Clientes</button>
+<button @onclick="navegar2" class="btn btn-warning">Navegar a Formulario de clientes</button>
+
+@code {
+	private void navegar1()
+    {
+        navigationManager.NavigateTo("/registroclientes");
+    }
+    private void navegar2()
+    {
+        navigationManager.NavigateTo("/formcliente");
+    }
+}
